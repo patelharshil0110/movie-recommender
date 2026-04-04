@@ -1,12 +1,12 @@
 import requests
 import streamlit as st
 
-API_BASE = "https://movie-rec-466x.onrender.com"
+API_BASE = "https://movie-recommender-zn4s.onrender.com"
 TMDB_IMG = "https://image.tmdb.org/t/p/w500"
 TMDB_BACK = "https://image.tmdb.org/t/p/w1280"
 
 st.set_page_config(
-    page_title="FRAME",
+    page_title="MENU",
     page_icon="",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -343,15 +343,7 @@ def parse_search(data, kw, limit=24):
     return suggestions, cards
 
 
-# ── TOP NAV ───────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class='topbar'>
-  <div class='topbar-logo'><em>Frame</em><span>.</span></div>
-  <div class='topbar-nav'>
-    <span>Discover</span><span>Collections</span><span>About</span>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 if st.session_state.view == "home":
@@ -399,15 +391,21 @@ if st.session_state.view == "home":
         st.stop()
 
     current_cat = st.session_state.category
-    pills = "<div class='cat-strip'>" + "".join(
-        f"<div class='cat-pill {'active' if s == current_cat else ''}'>{l}</div>"
-        for s, l in zip(CATEGORIES, CAT_LABELS)
-    ) + "</div><div style='height:0.5rem'></div>"
-    st.markdown(pills, unsafe_allow_html=True)
+
+    st.markdown("<div style='border-top:1px solid #e0d9ce;margin-top:0.5rem;padding-top:1.5rem'></div>", unsafe_allow_html=True)
 
     btn_cols = st.columns(len(CATEGORIES))
     for i, (s, l) in enumerate(zip(CATEGORIES, CAT_LABELS)):
         with btn_cols[i]:
+            if s == current_cat:
+                st.markdown(f"""
+                <style>
+                div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) [data-testid="stButton"] > button {{
+                    background: #1a1714 !important;
+                    color: #f5f0e8 !important;
+                    border-color: #1a1714 !important;
+                }}
+                </style>""", unsafe_allow_html=True)
             if st.button(l, key=f"cat_{s}"): goto_home(cat=s)
 
     st.markdown(f"""
